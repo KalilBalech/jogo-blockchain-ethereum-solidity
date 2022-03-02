@@ -20,7 +20,7 @@ contract ZombieFactory {
     uint dnaModulus = 10 ** dnaDigits;
 
     // structs em solidity são parecidas com structs em c, a parte de como são declaradas, dado que em solidity possuem um cons
-    //trutor inerente nelas que segue a ordem dos atributos
+    //trutor inerente nelas, que pode ser usado ou não, que segue a ordem dos atributos
     struct Zombie {
         string name;
         uint dna;
@@ -35,9 +35,13 @@ contract ZombieFactory {
     mapping (address => uint) ownerZombieCount;
 
     // variaveis e funções privadas só podem ser acessadas e rodadas pelo contrato que a declara
-    function _createZombie(string memory _name, uint _dna) private {
+    function _createZombie(string memory _name, uint _dna) internal {
         zombies.push(Zombie(_name, _dna));
         uint id = zombies.length - 1;
+
+        // msg.sender é uma variável global do tipo endereço que se refere ao endereço na conta do usuário da blockchain
+        // que chamou a função
+
         zombieToOwner[id] = msg.sender;
         ownerZombieCount[msg.sender]++;
 
